@@ -1,0 +1,47 @@
+# Compiled Output
+*.o
+*.so
+*.exe
+*.dll
+*.obj
+
+# Build Directories
+build/
+bin/
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# IDE/Editor Specific Files
+# Visual Studio
+*.suo
+*.user
+*.pdb
+*.opendb
+# Code::Blocks
+*.layout
+
+# IDE/Editor Specific Files
+# Visual Studio
+.vs/
+.vscode/
+
+# Dependency Folders
+# SFML Library
+SFML/
+lib/
+
+# Temporary Files
+# Backup files
+*~
+# Temp files for Windows
+Thumbs.db
+
+# Log Files
+*.log
+*.tlog
+
+# Documentation Build Files
+docs/build/
