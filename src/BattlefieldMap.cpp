@@ -27,8 +27,8 @@ void BattlefieldMap::initDepthMap()
         }
     }
     // use this for the hill in the middle of the map
-    int middle = static_cast<int>(size / 2);
-    depthMap[middle][middle] = 2;
+    int middle = size / 2;
+    depthMap[middle][middle] = 1;
     for (int i = middle - 1; i <= middle + 1; i++)
     {
         depthMap[i][middle - 1] = 1;
@@ -121,6 +121,7 @@ sf::Texture* BattlefieldMap::getTexture(BattlefieldTileHeights heights)
         texture.loadFromFile(presetFilePath + "NULLTERRAIN.png");
     }
     texture.setSmooth(true);
+    texture.generateMipmap();
     grassTextures.push_back(std::make_pair(texture, tilevalue));
     return getTexture(heights);
 }

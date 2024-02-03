@@ -88,7 +88,7 @@ void Camera::Pan(sf::Event& event, float dt) {
 }
 
 void Camera::Zoom(sf::Event& event, float dt) {
-    const float maxScale = 2.f, minScale = 0.5f;
+    const float maxScale = std::powf(1 + (1 / 9.f), 5), minScale = std::powf(1 - (1 / 10.f), 5);
 
     if (event.type == sf::Event::MouseWheelScrolled) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -96,15 +96,16 @@ void Camera::Zoom(sf::Event& event, float dt) {
         ScreenToWorld(mousePos.x, mousePos.y, worldXBeforeZoom, worldYBeforeZoom);
 
         if (event.mouseWheelScroll.delta > 0) {
-            scale *= 1.1f; //Use dt?
+            scale *= 1 + (1 / 9.f); //Use dt?
             if (scale > maxScale)
                 scale = maxScale;
         } else if (event.mouseWheelScroll.delta < 0) {
-            scale *= 0.9f; //Use dt?
+            scale *= 1 - (1 / 10.f); //Use dt?
             if (scale < minScale)
                 scale = minScale;
         }
 
+        std::cout << scale << std::endl;
 
         float worldXAfterZoom, worldYAfterZoom;
         ScreenToWorld(mousePos.x, mousePos.y, worldXAfterZoom, worldYAfterZoom);
@@ -145,8 +146,8 @@ void Camera::DrawTexture(sf::Texture& texture, float x, float y) {
     sf::Vector2f isometricPosition = GridGenerator::cartesianToIsometricTransform(sf::Vector2f(x, y));
     WorldToScreen(isometricPosition.x + window.getSize().x / 2, isometricPosition.y, screenX, screenY);
 
-    sprite.setPosition(static_cast<float>(screenX - 100.f * scale), static_cast<float>(screenY));
-    sprite.setScale(static_cast<float>(scale), static_cast<float>(scale));
+    sprite.setPosition(screenX - 100 * scale, screenY);
+    sprite.setScale(scale, scale);
 
     window.draw(sprite);
 }
