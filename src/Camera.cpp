@@ -88,7 +88,7 @@ void Camera::Pan(sf::Event& event, float dt) {
 }
 
 void Camera::Zoom(sf::Event& event, float dt) {
-    const float maxScale = std::powf(1 + (1 / 9.f), 5), minScale = std::powf(1 - (1 / 10.f), 5);
+    const float maxScale = std::powf(1 + 0.1111f, 5), minScale = std::powf(1 - 0.1f, 5);
 
     if (event.type == sf::Event::MouseWheelScrolled) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -96,11 +96,11 @@ void Camera::Zoom(sf::Event& event, float dt) {
         ScreenToWorld(mousePos.x, mousePos.y, worldXBeforeZoom, worldYBeforeZoom);
 
         if (event.mouseWheelScroll.delta > 0) {
-            scale *= 1 + (1 / 9.f); //Use dt?
+            scale *= 1 + 0.1111f; //Use dt?
             if (scale > maxScale)
                 scale = maxScale;
         } else if (event.mouseWheelScroll.delta < 0) {
-            scale *= 1 - (1 / 10.f); //Use dt?
+            scale *= 1 - 0.1f; //Use dt?
             if (scale < minScale)
                 scale = minScale;
         }
