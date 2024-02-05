@@ -115,10 +115,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\test.frag">
+    <None Include="resources\shaders\spotlight.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\test.vert">
+    <None Include="resources\shaders\spotlight.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

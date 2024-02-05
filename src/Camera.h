@@ -34,7 +34,7 @@ private:
     float startPanX = 0.f;
     float startPanY = 0.f;
 
-    sf::Shader shader;
+    sf::Shader spotlightShader;
 
     void DrawTexture(sf::RenderWindow& window, sf::Texture& texture, float x, float y);
 };

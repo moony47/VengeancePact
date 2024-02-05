@@ -2,7 +2,7 @@
 
 Camera::Camera(sf::Vector2u screenSize)
     : view(sf::Vector2f(screenSize / (unsigned)2), sf::Vector2f(screenSize)) {
-    if (!shader.loadFromFile("resources/shaders/test.vert", "resources/shaders/test.frag"))
+    if (!spotlightShader.loadFromFile("resources/shaders/spotlight.vert", "resources/shaders/spotlight.frag"))
         std::cerr << "[SHADER][CAMERA] Failed to load test shader";
 }
 
@@ -111,8 +111,8 @@ void Camera::DrawTexture(sf::RenderWindow& window, sf::Texture& texture, float x
     sprite.setPosition(isometricPosition);
     sprite.setOrigin({0, 500});
 
-    shader.setUniform("texture", texture);
-    shader.setUniform("hasTexture", true);
-    shader.setUniform("lightPos", sf::Vector2f(1000.f, 3500.f));
-    window.draw(sprite, &shader);
+    spotlightShader.setUniform("texture", texture);
+    spotlightShader.setUniform("hasTexture", true);
+    spotlightShader.setUniform("lightPos", view.getCenter());
+    window.draw(sprite, &spotlightShader);
 }
