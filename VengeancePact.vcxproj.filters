@@ -113,12 +113,21 @@
     <ClInclude Include="src\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Weather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\spotlight.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\shaders\spotlight.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\cloudShadows.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

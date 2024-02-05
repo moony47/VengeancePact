@@ -19,7 +19,6 @@ void GameStateManager::spawnRandomClouds(unsigned int num) {
         gameState.weather.setCloud(
             i, pos,
             size * sf::Vector2f(-800 + rand() % 1600, -600 + rand() % 1200),
-            size * sf::Vector2f(-800 + rand() % 1200, -600 + rand() % 1200),
             size
         );
     }
