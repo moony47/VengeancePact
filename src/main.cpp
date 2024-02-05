@@ -215,29 +215,9 @@ int main() {
 }
 */
 
-#include "Camera.h"
-#include "Scene.h"
+#include "Game.h"
 
 int main() {
-    unsigned int mapSize = 128;
-
-    GameStateManager gameStateManager = GameStateManager(mapSize * mapSize);
-    Camera camera;
-    Scene scene;
-    sf::Clock clock;
-
-    while (camera.window.isOpen()) {
-        float dt = clock.restart().asSeconds();
-        if (!camera.Update(dt))
-            break;
-        scene.UpdateGameScene(camera, gameStateManager.getState());
-
-        camera.window.clear(sf::Color().Black);
-        camera.DrawScene(scene.gameScene);
-        camera.DrawSceneAgents(scene.gameSceneAgents);
-        camera.window.display();
-    }
-
-    camera.window.close();
+    Game game;
     return 0;
 }

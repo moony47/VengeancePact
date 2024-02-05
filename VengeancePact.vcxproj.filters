@@ -51,6 +51,9 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Agent.h">
@@ -107,5 +110,16 @@
     <ClInclude Include="src\TerrainTile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shaders\test.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\test.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #include "GameStateManager.h"
 
-#define CELLSIZE 200
+#define CELLSIZE 500
 
 GameStateManager::GameStateManager(unsigned int numCells) {
     initializeBattlefieldVector(numCells);
@@ -40,7 +40,7 @@ void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& i) {
             int x = root->quadRect.getPosition().x + size * (k % 2);
             int y = root->quadRect.getPosition().y + size * ((int)(k > 1)); 
 
-            state.cells[i] = generateCell(x / CELLSIZE, y/CELLSIZE);
+            state.cells[i] = generateCell(x / CELLSIZE, y / CELLSIZE);
 
             if (rand() % 100 < 10)
                 state.cells[i].scenery.push_back(new Scenery(x / CELLSIZE + (rand() % 199 + 1) / 200.f, y / CELLSIZE + (rand() % 199 + 1) / 200.f));

@@ -1,23 +1,23 @@
 #include "GridGenerator.h"
 #include <iostream>
 
-sf::Vector2f GridGenerator::cartesianToIsometricTransform(const sf::Vector2f& cartesianPosition)
+sf::Vector2f GridGenerator::cartesianToIsometricTransform(const sf::Vector2f& cartesianPosition, const float size)
 {
     sf::Vector2f isometricPosition;
-    const float spriteDimension = 100.0f;
-    const float A = cartesianPosition.x * 1.0f * spriteDimension;
-    const float B = cartesianPosition.y * -1.0f * spriteDimension;
-    const float C = cartesianPosition.x * 0.5f * spriteDimension;
-    const float D = cartesianPosition.y * 0.5f * spriteDimension;
+    const float A = cartesianPosition.x * 1.0f * size;
+    const float B = cartesianPosition.y * -1.0f * size;
+    const float C = cartesianPosition.x * 0.5f * size;
+    const float D = cartesianPosition.y * 0.5f * size;
     isometricPosition.x = A + B;
     isometricPosition.y = C + D;
     return isometricPosition;
 }
 
-sf::Vector2f GridGenerator::isometricToCartesianTransform(const sf::Vector2f& isometricPosition)
+sf::Vector2f GridGenerator::isometricToCartesianTransform(const sf::Vector2f& isometricPosition, const float size)
 {
+    //Might be wrong
+    std::cout << "HERE6";
     sf::Vector2f cartesianPosition;
-    const float spriteDimension = 100.0f;
     float det = 1.0f / (1 * 0.5 - 0 * -1);
     cartesianPosition.x = (((isometricPosition.x + isometricPosition.y * 2) / 2) - 25) / 50;
     cartesianPosition.y = (((det * (-isometricPosition.x * 0.5 + isometricPosition.y * 1)) - 50) / 100) - 1;

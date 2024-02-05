@@ -120,7 +120,7 @@ sf::Texture* BattlefieldMap::getTexture(BattlefieldTileHeights heights)
         std::cout << "[TEXTURE MISSING][GRASS]-" << tilevalue << std::endl;
         texture.loadFromFile(presetFilePath + "NULLTERRAIN.png");
     }
-    texture.setSmooth(true);
+    //texture.setSmooth(true);
     //texture.generateMipmap();
     grassTextures.push_back(std::make_pair(texture, tilevalue));
     return getTexture(heights);

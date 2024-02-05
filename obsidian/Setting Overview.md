@@ -1,0 +1,41 @@
+The War of Reckoning on the Shattered Plains
+- Alethi vs Listeners (Parshendi)
+- Greatshell chasmfiends are hunted by both sides for gemhearts
+- Battlefield is array of broken plateaus with large chasms 
+	- Alethi must use bridges to transport troops across chasms between plateaus
+	- Alethi shardbearers and scouts can jump the chasms when not in combat
+	- Listeners can jump the chasms but not with ease, only when not in combat
+- Alethi are ruled by the ten Highprinces who are sworn to King Elhokar
+	- The Highprinces act independently and selfishly despite being "allies" in the war
+	- They each control their own armies and have a Warcamp on the outskirts of the Shattered Plains
+	- Each Highprince's army is renowned for its distinct strengths and weaknesses e.g.
+		- Kholin forces have strong heavy infantry but uses slow Chull drawn wheeled and armoured bridges
+		- Sadeus has fast and brutal man/slave carried bridges
+		- Roion is known for having the best archers of the Alethi army
+![[Pasted image 20240201181042.jpg]]
+- Chasmfiends are enormous chitinous creatures with 14 "trunk-like" legs, 4 "horse-sized" foreclaws, a dozen smaller legs
+	- They prowl in the chasms between plateaus hunting for food and for a plateau to pupate on
+	- It's likely they don't live in the Shattered Plains, but migrate there specifically to breed
+	- While pupating they curl up and form an immobile rock-coloured chrysalis around them to await a Highstorm
+	- They contain large gemhearts in their chests and so are hunted by both the Alethi and the Listeners, both fully active adult chasmfiends and pupating chasmfiends
+![[Sketchbook_chasmfiend.webp]]
+- Alethi and Listener forces often clash in contest of chasmfiend chrysalises 
+	- The Highprinces covet gemhearts for the wealth and glory and see it as an internal competition to capture the most gemhearts
+	- The Listeners (likely) use the gemhearts to soulcast rocks into food and this is how they have survived the 5 year long siege by the Alethi
+	- The chrysalises take a long time to extract a gemheart from using conventional tools, a Shardblade greatly speeds up the process
+- The Highprinces control some of the plateaus near the Warcamps permanently and will request payment by other Highprinces who wish to use them. They also often sell and buy plateaus from each other to aid in their efforts to capture more gemhearts
+	- These are generally permanently guarded and bridging infrastructure is setup to allow the armies to deploy into the Plains quickly to beat other Highprinces to the gemhearts or to reach them in time to fight off the Listeners 
+- Shardbearers are warriors who wield a Shardblade and/or Shardplate
+	- These are ancient relics and none alive know how to create them, they must be recovered from other Shardbearers
+	- They have been recovered and a series of gemstone fabriel devices have been attached to allow their owners to bond to them
+		- For a Shardblade this means the bearer can summon the blade at any time into their hand after 10 heartbeats
+		- For Shardplate this means the plate adopts the bearers form perfectly
+	- Shardblades will cut through all non-living material (except Shardplate) effortlessly. When cutting living flesh they instead sever the soul and will leave limbs grey and dead and eyes will burst aflame smoking black if the spine is hit leaving the target dead. 
+		- Blades are often longer than the bearer is tall and so take great skill and training to wield effectively in a duel, though against non-bearers they are devastating even if simply swung wildly
+	- Shardplate grants enhanced strength, speed, dexterity to the bearer. There are no gaps in the joints of Plate, it is filled with smaller plates. To kill a bearer of Plate, the individual plates must be smashed with repeated forceful strikes causing the plates to leak Stormlight until eventually they explode into a display of "molten metal" and leave the bearer exposed in that location
+		- Shardplate can be repaired after a fight by feeding it Stormlight
+![[Pasted image 20240201185224.jpg]]
+- Highstorms frequently but irregularly ravage Roshar forcing living creatures and plants to find shelter for fear of being torn apart, this is especially true on the Shattered Plains due to the lack of natural shelter from mountains etc.
+	- Any gemstone left out in a Highstorm will be infused with Stormlight which can be used to repair Shardplate, light rooms, power fabriel devices such as heating fabriels (and heal Knights Radiant and fuel their Surges)
+	- Spheres are used as currency on Roshar, they are comprised of glass shells containing a range of sizes and types of gemstones, denoting their denomination e.g. a diamond chip is the base unit, a ruby mark is worth 200x and an emerald broam is worth 1000x
+	- A sphere not infused with Stormlight is called "dun" and are often suspected of being fake as only true gemstones can hold Stormlight - larger and more perfect gems can hold more and for longer
