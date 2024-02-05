@@ -11,6 +11,7 @@ struct Scenery {
 
 		texture = new sf::Texture();
 		texture->loadFromFile("resources/images/terrain/scenery/tree.png");
+		texture->generateMipmap();
 	}
 };
 

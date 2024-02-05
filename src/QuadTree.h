@@ -15,12 +15,16 @@ struct QuadTree {
         : depth(depth), quadRect(rect), children{ nullptr, nullptr, nullptr, nullptr } {}
 
     ~QuadTree() {
-        for (QuadTree* child : children)
-            delete[] child;
+        delete[] & children;
     }
 };
 
 struct QuadTreeLeaf : public QuadTree {
+    ~QuadTreeLeaf() {
+        delete[] & cellIter;
+        delete[] & agentIters;
+    }
+
     std::vector<MapCell>::iterator cellIter;
     std::vector<std::list<Agent>::iterator> agentIters;
 

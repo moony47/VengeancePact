@@ -2,8 +2,6 @@
 
 Camera::Camera(sf::Vector2u screenSize)
     : view(sf::Vector2f(screenSize / (unsigned)2), sf::Vector2f(screenSize)) {
-    if (!spotlightShader.loadFromFile("resources/shaders/spotlight.vert", "resources/shaders/spotlight.frag"))
-        std::cerr << "[SHADER][CAMERA] Failed to load test shader";
 }
 
 void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
@@ -11,7 +9,7 @@ void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2u windowSize = window.getSize();
     const int edgeThreshold = windowSize.y / 20;
-    float scale = window.getSize().x / view.getSize().x;
+    float scale = viewScale(window);
 
 
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle) {
@@ -57,9 +55,7 @@ void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
 
 void Camera::Zoom(sf::RenderWindow& window, sf::Event& event, float dt) {
     const float maxScale = std::powf(1.1111111111111f, 10), minScale = std::powf(0.9f, 10);
-    float scale = window.getSize().x / view.getSize().x;
-
-    //std::cout << scale << std::endl;
+    float scale = viewScale(window);
 
     if (event.type == sf::Event::MouseWheelScrolled) {
         window.setView(view);
@@ -78,31 +74,30 @@ void Camera::Zoom(sf::RenderWindow& window, sf::Event& event, float dt) {
         if (offsetX < -12000) offsetX = -12000;
         if (offsetY > 10500) offsetY = 10500;
         if (offsetY < -500) offsetY = -500;*/
-        window.setView(window.getDefaultView());
     }
 }
 
-void Camera::DrawSceneAgents(sf::RenderWindow& window, std::vector<std::list<Agent>::iterator>& gameSceneAgents) {
+void Camera::DrawSceneAgents(sf::RenderWindow& window, Weather& weather, std::vector<std::list<Agent>::iterator>& gameSceneAgents) {
     window.setView(view);
+    weather.cloudShaderUpdate();
     for (auto iter = gameSceneAgents.begin(); iter != gameSceneAgents.end(); iter++) {
         Agent agent = **iter;
-        DrawTexture(window, *agent.texture, agent.x, agent.y);
+        DrawTexture(window, weather, *agent.texture, agent.x, agent.y);
     }
-    window.setView(window.getDefaultView());
 }
 
-void Camera::DrawScene(sf::RenderWindow& window, std::set<std::vector<MapCell>::iterator>& gameScene) {
+void Camera::DrawScene(sf::RenderWindow& window, Weather& weather, std::set<std::vector<MapCell>::iterator>& gameScene) {
     window.setView(view);
+    weather.cloudShaderUpdate();
     for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++) {
         MapCell cell = **iter;
-        DrawTexture(window, *cell.texture, cell.x, cell.y);
+        DrawTexture(window, weather, *cell.texture, cell.x, cell.y);
         for (Scenery* obj : cell.scenery)
-            DrawTexture(window, *obj->texture, obj->x, obj->y);
+            DrawTexture(window, weather, *obj->texture, obj->x, obj->y);
     }
-    window.setView(window.getDefaultView());
 }
 
-void Camera::DrawTexture(sf::RenderWindow& window, sf::Texture& texture, float x, float y) {
+void Camera::DrawTexture(sf::RenderWindow& window, Weather& weather, sf::Texture& texture, float x, float y) {
     sf::Sprite sprite = sf::Sprite();
 
     sprite.setTexture(texture);
@@ -111,8 +106,5 @@ void Camera::DrawTexture(sf::RenderWindow& window, sf::Texture& texture, float x
     sprite.setPosition(isometricPosition);
     sprite.setOrigin({0, 500});
 
-    spotlightShader.setUniform("texture", texture);
-    spotlightShader.setUniform("hasTexture", true);
-    spotlightShader.setUniform("lightPos", view.getCenter());
-    window.draw(sprite, &spotlightShader);
+    window.draw(sprite, weather.getCloudShader(texture));
 }

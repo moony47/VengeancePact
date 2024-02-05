@@ -34,6 +34,7 @@
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Agent.h" />
     <ClInclude Include="src\AnimationManager.h" />
     <ClInclude Include="src\Application.h" />
@@ -53,8 +54,10 @@
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Scenery.h" />
     <ClInclude Include="src\TerrainTile.h" />
+    <ClInclude Include="src\Weather.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\shaders\cloudShadows.frag" />
     <None Include="resources\shaders\spotlight.frag" />
     <None Include="resources\shaders\spotlight.vert" />
   </ItemGroup>

@@ -9,6 +9,7 @@ void Scene::UpdateGameScene(sf::View& view, GameState& gameState) {
 	sf::FloatRect viewbounds(view.getCenter() - (view.getSize() / 2.f), view.getSize());
 
 	gameScene.clear();
+	gameSceneAgents.clear();
 	findViewportIterators(view, gameState.quadTree, viewbounds);
 }
 

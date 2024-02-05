@@ -4,6 +4,7 @@ Agent::Agent(float _x, float _y)
     : unit(""), health(0), morale(0), x(_x), y(_y) {
     texture = new sf::Texture();
     texture->loadFromFile("resources/images/agents/HDman.png");
+    texture->generateMipmap();
 }
 
 Agent::~Agent() {}

@@ -3,7 +3,7 @@
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Vengeance Pact", sf::Style::Fullscreen),
     gameStateManager(mapSize* mapSize),
-    camera(window.getSize()){
+    camera(window.getSize()) {
 
     window.setFramerateLimit(165);
     window.setVerticalSyncEnabled(true);
@@ -30,16 +30,22 @@ void Game::Run() {
             camera.Pan(window, event, dt);
         }
 
+        //Move Clouds
+        gameStateManager.moveClouds(dt, window.getSize().x / camera.view.getSize().x);
+
         //Update Scene
         scene.UpdateGameScene(camera.view, gameStateManager.getState());
 
         //Rendering
         window.clear(sf::Color().Black);
 
-        camera.DrawScene(window, scene.gameScene);
-        camera.DrawSceneAgents(window, scene.gameSceneAgents);
+        camera.DrawScene(window, gameStateManager.getState().weather, scene.gameScene);
+        camera.DrawSceneAgents(window, gameStateManager.getState().weather, scene.gameSceneAgents);
 
         window.display();
+
+        //window.setView(camera.view);
+        //std::cout << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << ", " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).y << std::endl;
     }
     window.close();
 }

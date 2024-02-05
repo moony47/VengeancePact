@@ -4,11 +4,36 @@
 
 GameStateManager::GameStateManager(unsigned int numCells) {
     initializeBattlefieldVector(numCells);
+
+    gameState.weather.initCloudShader();
+    spawnRandomClouds(15);
+}
+
+
+void GameStateManager::spawnRandomClouds(unsigned int num) {
+    if (num > 20) num = 20;
+    for (unsigned int i = 0; i < num; i++) {
+        sf::Vector2f pos(-6000 + rand() % 12000, -2000 + rand() % 8000);
+        float size = (30 + rand() % 20) / 100.f;
+
+        gameState.weather.setCloud(
+            i, pos,
+            size * sf::Vector2f(-800 + rand() % 1600, -600 + rand() % 1200),
+            size * sf::Vector2f(-800 + rand() % 1200, -600 + rand() % 1200),
+            size
+        );
+    }
+}
+
+void GameStateManager::moveClouds(float dt, float scale) {
+    for (int i = 0; i < 20; i++)
+        gameState.weather.moveCloud(i, sf::Vector2f(25 * dt, 35 * dt));
+    gameState.weather.scaleClouds(scale);
 }
 
 void GameStateManager::initialiseQuadTree(unsigned int battlefieldSize, unsigned int& i) {
-    state.quadTree = new QuadTree(sf::IntRect(0, 0, battlefieldSize, battlefieldSize), 0);
-    generateQuadTree((QuadTree*)state.quadTree, i);
+    gameState.quadTree = new QuadTree(sf::IntRect(0, 0, battlefieldSize, battlefieldSize), 0);
+    generateQuadTree((QuadTree*)gameState.quadTree, i);
 }
 
 void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& i) {
@@ -40,12 +65,12 @@ void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& i) {
             int x = root->quadRect.getPosition().x + size * (k % 2);
             int y = root->quadRect.getPosition().y + size * ((int)(k > 1)); 
 
-            state.cells[i] = generateCell(x / CELLSIZE, y / CELLSIZE);
+            gameState.cells[i] = generateCell(x / CELLSIZE, y / CELLSIZE);
 
             if (rand() % 100 < 10)
-                state.cells[i].scenery.push_back(new Scenery(x / CELLSIZE + (rand() % 199 + 1) / 200.f, y / CELLSIZE + (rand() % 199 + 1) / 200.f));
+                gameState.cells[i].scenery.push_back(new Scenery(x / CELLSIZE + (rand() % 199 + 1) / 200.f, y / CELLSIZE + (rand() % 199 + 1) / 200.f));
             
-            std::vector<MapCell>::iterator iter = state.cells.begin() + (i++);
+            std::vector<MapCell>::iterator iter = gameState.cells.begin() + (i++);
 
             children[k] = new QuadTreeLeaf(
                 sf::IntRect(x, y, size, size), 
@@ -54,8 +79,8 @@ void GameStateManager::generateQuadTree(QuadTree* root, unsigned int& i) {
             );
 
             if (rand() % 100 < 1) {
-                state.agents.push_back(Agent(x / CELLSIZE + (rand() % 199 + 1) / 200.f, y / CELLSIZE + (rand() % 199 + 1) / 200.f));
-                ((QuadTreeLeaf*)children[k])->agentIters.push_back(std::prev(state.agents.end()));
+                gameState.agents.push_back(Agent(x / CELLSIZE + (rand() % 199 + 1) / 200.f, y / CELLSIZE + (rand() % 199 + 1) / 200.f));
+                ((QuadTreeLeaf*)children[k])->agentIters.push_back(std::prev(gameState.agents.end()));
             }
         }
 
@@ -85,9 +110,9 @@ void GameStateManager::initializeBattlefieldVector(unsigned int numCells)
 
     battlefieldMap.initMap(static_cast<unsigned int>(static_cast<int>(std::floor(std::sqrt(numCells)))));
 
-    state.cells.clear();
-    state.cells.resize(numCells); 
-    state.agents.clear();
+    gameState.cells.clear();
+    gameState.cells.resize(numCells); 
+    gameState.agents.clear();
 
     unsigned int i = 0;
     initialiseQuadTree(static_cast<int>(std::floor(std::sqrt(numCells))) * CELLSIZE, i);

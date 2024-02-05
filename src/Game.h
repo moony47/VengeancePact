@@ -1,6 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include "Scene.h"
+#include "Weather.h"
 
 class Game
 {
