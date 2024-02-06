@@ -34,12 +34,11 @@
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="src\Agent.h" />
     <ClInclude Include="src\AnimationManager.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\AssetCRUDManager.h" />
-    <ClInclude Include="src\BattlefieldCell.h" />
+    <ClInclude Include="src\MapCell.h" />
     <ClInclude Include="src\BattlefieldMap.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Game.h" />

@@ -2,6 +2,7 @@
 
 Camera::Camera(sf::Vector2u screenSize)
     : view(sf::Vector2f(screenSize / (unsigned)2), sf::Vector2f(screenSize)) {
+    select.loadFromFile("resources/images/terrain/selected.png");
 }
 
 void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
@@ -77,34 +78,61 @@ void Camera::Zoom(sf::RenderWindow& window, sf::Event& event, float dt) {
     }
 }
 
-void Camera::DrawSceneAgents(sf::RenderWindow& window, Weather& weather, std::vector<std::list<Agent>::iterator>& gameSceneAgents) {
+void Camera::DrawSceneAgents(sf::RenderWindow& window, Weather* weather, std::vector<std::list<Agent>::iterator>& gameSceneAgents) {
     window.setView(view);
-    weather.cloudShaderUpdate();
+    weather->cloudShaderUpdate();
     for (auto iter = gameSceneAgents.begin(); iter != gameSceneAgents.end(); iter++) {
         Agent agent = **iter;
         DrawTexture(window, weather, *agent.texture, agent.x, agent.y);
     }
 }
 
-void Camera::DrawScene(sf::RenderWindow& window, Weather& weather, std::set<std::vector<MapCell>::iterator>& gameScene) {
+void Camera::DrawScene(sf::RenderWindow& window, Weather* weather, std::set<std::vector<MapCell>::iterator>& gameScene) {
     window.setView(view);
-    weather.cloudShaderUpdate();
+    weather->cloudShaderUpdate();
     for (auto iter = gameScene.begin(); iter != gameScene.end(); iter++) {
         MapCell cell = **iter;
         DrawTexture(window, weather, *cell.texture, cell.x, cell.y);
         for (Scenery* obj : cell.scenery)
             DrawTexture(window, weather, *obj->texture, obj->x, obj->y);
     }
+
+    for (sf::Vector2f p : path)
+        DrawTexture(window, nullptr, select, p.x/ 250.f, p.y/ 250.f);
 }
 
-void Camera::DrawTexture(sf::RenderWindow& window, Weather& weather, sf::Texture& texture, float x, float y) {
+void Camera::DrawTexture(sf::RenderWindow& window, Weather* weather, sf::Texture& texture, float x, float y) {
     sf::Sprite sprite = sf::Sprite();
 
     sprite.setTexture(texture);
 
     sf::Vector2f isometricPosition = GridGenerator::cartesianToIsometricTransform({x, y}, 250.f);
     sprite.setPosition(isometricPosition);
-    sprite.setOrigin({0, 500});
+    sprite.setOrigin({sprite.getLocalBounds().getSize().x / 2, sprite.getLocalBounds().getSize().y / 2});
 
-    window.draw(sprite, weather.getCloudShader(texture));
+    if (weather != nullptr)
+        window.draw(sprite, weather->getCloudShader(texture));
+    else
+        window.draw(sprite);
+}
+
+void Camera::SelectCell(sf::RenderWindow& window, sf::Event& event, GameStateManager& gameStateManager) {
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), view);
+            sf::Vector2f isoPos = GridGenerator::isometricToCartesianTransform(mousePos, 1.f);
+
+            path.clear();
+            path.push_back(gameStateManager.getQuadTreeNode(isoPos)->quadRect.getPosition());
+        } else if (event.mouseButton.button == sf::Mouse::Right) {
+            sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), view);
+            sf::Vector2f isoPos = GridGenerator::isometricToCartesianTransform(mousePos, 1.f);
+
+            MovementManager movement;
+            if (!path.empty())
+                path = movement.AStarPathFind(path.back(), isoPos, gameStateManager);
+            else
+                path = movement.AStarPathFind(isoPos, isoPos, gameStateManager);
+        }
+    }
 }

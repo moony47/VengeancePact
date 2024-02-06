@@ -19,14 +19,14 @@ void Scene::findViewportIterators(sf::View& view, QuadTree* root, sf::FloatRect&
 	int sizeX = root->quadRect.getSize().x;
 	int sizeY = (root->quadRect.getSize().y / 2 + (TILE_SIZE / 2) * MAX_TILE_DEPTH);
 
-	sf::FloatRect isometricNodeRect(isometricPosition.x - (sizeX - TILE_SIZE) / 2, isometricPosition.y - ((TILE_SIZE / 2) * MAX_TILE_DEPTH), sizeX, sizeY);
+	sf::FloatRect isometricNodeRect(isometricPosition.x - sizeX / 2, isometricPosition.y - ((TILE_SIZE / 2) * MAX_TILE_DEPTH) + TILE_SIZE, sizeX, sizeY);
 
 	if (!viewbounds.intersects(isometricNodeRect))
 		return;
 
-	if (typeid(*root) == typeid(QuadTreeLeaf)) {
-		gameScene.insert(((QuadTreeLeaf*)root)->cellIter);
-		gameSceneAgents.insert(gameSceneAgents.end(), ((QuadTreeLeaf*)root)->agentIters.begin(), ((QuadTreeLeaf*)root)->agentIters.end());
+	if (typeid(*root) == typeid(QuadTreeCell)) {
+		gameScene.insert(((QuadTreeCell*)root)->cellIter);
+		gameSceneAgents.insert(gameSceneAgents.end(), ((QuadTreeCell*)root)->agentIters.begin(), ((QuadTreeCell*)root)->agentIters.end());
 	} else {
 		for (QuadTree* child : ((QuadTree*)root)->children)
 			findViewportIterators(view, child, viewbounds);

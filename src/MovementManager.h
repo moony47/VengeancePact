@@ -3,41 +3,39 @@
 #include <vector>
 #include <iostream>
 
-struct Node
-{
-	Node* pred;
-	sf::Vector2i pos;
+#include "QuadTree.h"
+#include "GameStateManager.h"
 
-	double g, h;
-
-	Node(sf::Vector2i& newPos, double newH)
-		: pos(newPos), pred(nullptr), g(DBL_MAX), h(newH) {}
-
-	bool operator==(const Node& rhs) const
-	{
-		return pos == rhs.pos;
-	}
-
-	bool operator==(const sf::Vector2i& rhs) const
-	{
-		return pos == rhs;
-	}
-};
+//struct Node
+//{
+//	Node* pred;
+//	sf::Vector2i pos;
+//
+//	float g, h;
+//
+//	Node(const sf::Vector2i& _pos, const float _h)
+//		: pos(_pos), pred(nullptr), g(FLT_MAX), h(_h) {}
+//
+//	bool operator==(const Node& rhs) const
+//	{
+//		return pos == rhs.pos;
+//	}
+//
+//	bool operator==(const sf::Vector2i& rhs) const
+//	{
+//		return pos == rhs;
+//	}
+//};
 
 class MovementManager
 {
 public:
-	MovementManager(const int&);
+	MovementManager();
 	~MovementManager();
 
-	std::vector<sf::Vector2i> AStarPathFind(sf::Vector2i, sf::Vector2i);
+	std::vector<sf::Vector2f> AStarPathFind(sf::Vector2f, sf::Vector2f, GameStateManager& gameStateManager);
 private:
-	void clearAndInitialiseMapNodes();
-
-	std::vector<sf::Vector2i> retracePath(Node&);
-	std::vector<sf::Vector2i> getNeighboursOf(Node&) const;
-	double euclideanDistance(sf::Vector2i&, sf::Vector2i&) const;
-
-	Node*** mapNodes;
-	const int mapSize;
+	std::vector<sf::Vector2f> retracePath(QuadTreeNav&);
+	float euclideanDistance(const sf::Vector2f&, const sf::Vector2f&) const;
+	void clearNodes(std::vector<QuadTreeNav*>);
 };

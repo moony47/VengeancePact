@@ -4,23 +4,25 @@
 #include <vector>
 #include <list>
 
+#include "MapCell.h"
+
 struct QuadTree {
     virtual void f() {};
 
     unsigned int depth;
-    sf::IntRect quadRect;
+    sf::FloatRect quadRect;
     std::array<QuadTree*, 4> children;
 
-    QuadTree(const sf::IntRect& rect, const unsigned int& depth)
-        : depth(depth), quadRect(rect), children{ nullptr, nullptr, nullptr, nullptr } {}
+    QuadTree(const sf::FloatRect _rect, const unsigned int _depth)
+        : depth(_depth), quadRect(_rect), children{ nullptr, nullptr, nullptr, nullptr } {}
 
     ~QuadTree() {
         delete[] & children;
     }
 };
 
-struct QuadTreeLeaf : public QuadTree {
-    ~QuadTreeLeaf() {
+struct QuadTreeCell : public QuadTree {
+    ~QuadTreeCell() {
         delete[] & cellIter;
         delete[] & agentIters;
     }
@@ -28,6 +30,29 @@ struct QuadTreeLeaf : public QuadTree {
     std::vector<MapCell>::iterator cellIter;
     std::vector<std::list<Agent>::iterator> agentIters;
 
-    QuadTreeLeaf(const sf::IntRect& rect, const unsigned int& depth, std::vector<MapCell>::iterator& _iter)
-        : QuadTree(rect, depth), cellIter(_iter), agentIters(std::vector<std::list<Agent>::iterator>()) {}
+    QuadTreeCell(const sf::FloatRect _rect, const unsigned int _depth, const std::vector<MapCell>::iterator& _iter)
+        : QuadTree(_rect, _depth), cellIter(_iter), agentIters(std::vector<std::list<Agent>::iterator>()) {}
+};
+
+struct QuadTreeNav : public QuadTree {
+    ~QuadTreeNav() {
+    }
+
+    std::vector<QuadTreeNav*> neighbours;
+    float walkability;
+
+    QuadTreeNav(const sf::FloatRect _rect, const unsigned int _depth, const float _walkability = 1.f)
+        : QuadTree(_rect, _depth), walkability(_walkability), neighbours({ nullptr, nullptr, nullptr, nullptr }) {}
+
+    void setNeighbours(std::vector<QuadTreeNav*> _neighbours) { neighbours = _neighbours; }
+
+    //For use by MovementManager
+    bool visited = false;
+    QuadTreeNav* prev = nullptr;
+    float g = FLT_MAX, h = 0;
+
+    void initialiseNavNode(float _h) {
+        visited = true;
+        h = _h;
+    }
 };

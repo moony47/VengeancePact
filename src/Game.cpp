@@ -28,6 +28,7 @@ void Game::Run() {
             //Update Camera
             camera.Zoom(window, event, dt);
             camera.Pan(window, event, dt);
+            camera.SelectCell(window, event, gameStateManager);
         }
 
         //Move Clouds
@@ -39,13 +40,10 @@ void Game::Run() {
         //Rendering
         window.clear(sf::Color().Black);
 
-        camera.DrawScene(window, gameStateManager.getState().weather, scene.gameScene);
-        camera.DrawSceneAgents(window, gameStateManager.getState().weather, scene.gameSceneAgents);
+        camera.DrawScene(window, &gameStateManager.getState().weather, scene.gameScene);
+        camera.DrawSceneAgents(window, &gameStateManager.getState().weather, scene.gameSceneAgents);
 
         window.display();
-
-        //window.setView(camera.view);
-        //std::cout << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << ", " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).y << std::endl;
     }
     window.close();
 }

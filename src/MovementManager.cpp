@@ -1,32 +1,33 @@
 #include "MovementManager.h"
 
-MovementManager::MovementManager(const int& newMapSize)
-	: mapSize(newMapSize) {
-	clearAndInitialiseMapNodes();
+MovementManager::MovementManager() {
 }
 
 MovementManager::~MovementManager() {
 
 }
 
-void MovementManager::clearAndInitialiseMapNodes()
-{
-	mapNodes = new Node**[mapSize];
-	for (int i = 0; i < mapSize; i++) {
-		mapNodes[i] = new Node*[mapSize];
-		for (int j = 0; j < mapSize; j++)
-			mapNodes[i][j] = nullptr;
+void MovementManager::clearNodes(std::vector<QuadTreeNav*> toClear) {
+	for (QuadTreeNav* node : toClear) {
+		node->g = FLT_MAX;
+		node->h = 0;
+		node->prev = nullptr;
+		node->visited = false;
 	}
 }
 
-std::vector<sf::Vector2i> MovementManager::AStarPathFind(sf::Vector2i source, sf::Vector2i target)
-{
-	Node sourceNode(source, euclideanDistance(source, target));
-	sourceNode.g = 0;
+std::vector<sf::Vector2f> MovementManager::AStarPathFind(sf::Vector2f source, sf::Vector2f target, GameStateManager& gameStateManager) {
+	QuadTreeNav* sourceNode = (QuadTreeNav*)gameStateManager.getQuadTreeNode(source);
+	QuadTreeNav* targetNode = (QuadTreeNav*)gameStateManager.getQuadTreeNode(target);
 
-	mapNodes[source.x][source.y] = &sourceNode;
+	if (sourceNode == nullptr || targetNode == nullptr)
+		return std::vector<sf::Vector2f>();
 
-	std::vector<Node*> openSet = { &sourceNode };
+	sourceNode->g = 0;
+	sourceNode->visited = true;
+
+	std::vector<QuadTreeNav*> openSet = { sourceNode };
+	std::vector<QuadTreeNav*> closedSet;
 
 	while (!openSet.empty())
 	{
@@ -35,72 +36,59 @@ std::vector<sf::Vector2i> MovementManager::AStarPathFind(sf::Vector2i source, sf
 			if (openSet[current]->g + openSet[current]->h > openSet[i]->g + openSet[i]->h)
 				current = i;
 
-		Node* currentNode = openSet[current];
+		QuadTreeNav* currentNode = openSet[current];
 
-		if (*currentNode == target) {
-			clearAndInitialiseMapNodes();
-			return retracePath(*currentNode);
+		if (currentNode->quadRect.contains(target)) {
+			std::vector<sf::Vector2f> path = retracePath(*currentNode);
+			clearNodes(openSet);
+			clearNodes(closedSet);
+			return path;
 		}
 
 		openSet.erase(std::next(openSet.begin(), current));
+		closedSet.push_back(currentNode);
 
-		std::vector<sf::Vector2i> neighbours = getNeighboursOf(*currentNode);
-
-		for (sf::Vector2i v : neighbours)
+		for (QuadTreeNav* neigh : currentNode->neighbours)
 		{
-			if (mapNodes[v.x][v.y] == nullptr)
-				mapNodes[v.x][v.y] = new Node(v, euclideanDistance(target, v));
+			if (neigh == nullptr)
+				continue;
 
-			Node* neighbour = mapNodes[v.x][v.y];
-			double temp_g = currentNode->g + 1;
+			if (neigh->walkability == 0)
+				continue;
+			if (!neigh->visited)
+				neigh->initialiseNavNode(euclideanDistance(neigh->quadRect.getPosition(), targetNode->quadRect.getPosition()));
 
-			if (temp_g < neighbour->g)
+			float temp_g = currentNode->g + euclideanDistance(currentNode->quadRect.getPosition(), neigh->quadRect.getPosition()) / neigh->walkability;
+
+			if (temp_g < neigh->g)
 			{
-				neighbour->pred = currentNode;
-				neighbour->g = temp_g;
+				neigh->prev = currentNode;
+				neigh->g = temp_g;
 
-				if (std::find_if(openSet.begin(), openSet.end(), [neigh = neighbour] (Node* c) { return c == neigh; }) == openSet.end())
-					openSet.push_back(neighbour);
+				if (std::find_if(openSet.begin(), openSet.end(), [n = neigh] (QuadTreeNav* c) { return c == n; }) == openSet.end())
+					openSet.push_back(neigh);
 			}
 		}
 	}
 
-	clearAndInitialiseMapNodes();
-	return std::vector<sf::Vector2i>();
+	clearNodes(openSet);
+	clearNodes(closedSet);
+	return std::vector<sf::Vector2f>();
 }
 
-std::vector<sf::Vector2i> MovementManager::getNeighboursOf(Node& node) const
-{
-	sf::Vector2i pos = node.pos;
+std::vector<sf::Vector2f> MovementManager::retracePath(QuadTreeNav& start) {
+	std::vector<sf::Vector2f> path;
+	path.push_back(start.quadRect.getPosition());
 
-	std::vector<sf::Vector2i> neighbours = std::vector<sf::Vector2i>();
-
-	if (pos.x != 0)
-		neighbours.push_back(sf::Vector2i(pos.x - 1, pos.y));
-	if (pos.x != mapSize - 1)
-		neighbours.push_back(sf::Vector2i(pos.x + 1, pos.y));
-	if (pos.y != 0)
-		neighbours.push_back(sf::Vector2i(pos.x, pos.y - 1));
-	if (pos.y != mapSize - 1)
-		neighbours.push_back(sf::Vector2i(pos.x, pos.y + 1));
-
-	return neighbours;
-}
-
-std::vector<sf::Vector2i> MovementManager::retracePath(Node& start)
-{
-	std::vector<sf::Vector2i> path = { start.pos };
-
-	Node current = start;
-	while (current.pred != nullptr) {
-		path.insert(path.begin(), current.pred->pos);
-		current = *current.pred;
+	QuadTreeNav* current = &start;
+	while (current->prev != nullptr) {
+		path.push_back(current->prev->quadRect.getPosition());
+		current = current->prev;
 	}
 
 	return path;
 }
 
-double MovementManager::euclideanDistance(sf::Vector2i& v, sf::Vector2i& u) const
-{
-	return (v.x - u.x) * (v.x - u.x) + (v.y - u.y) * (v.y - u.y);
+float MovementManager::euclideanDistance(const sf::Vector2f& v, const sf::Vector2f& u) const {
+	return std::sqrtf((v.x - u.x) * (v.x - u.x) + (v.y - u.y) * (v.y - u.y));
 }

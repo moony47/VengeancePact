@@ -2,7 +2,7 @@
 #include <cmath>
 #include "GameState.h"
 #include "BattlefieldMap.h"
-#include "BattlefieldCell.h"
+#include "MapCell.h"
 
 
 class GameStateManager {
@@ -15,9 +15,15 @@ public:
     GameState& getState() { return gameState; }
 
     void moveClouds(float dt, float scale);
+
+    QuadTree* getQuadTreeNode(sf::Vector2f point);
 private:
     void generateQuadTree(QuadTree* root, unsigned int& i);
     MapCell generateCell(int x, int y);
+
+    void setQuadTreeNavNeighbours(QuadTree* root);
+
+    QuadTree* getQuadTreeNode(QuadTree* root, sf::Vector2f point);
 
     void spawnRandomClouds(unsigned int num);
 

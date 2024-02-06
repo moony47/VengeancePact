@@ -1,6 +1,6 @@
 #pragma once
 #include <set>
-#include "BattlefieldCell.h"
+#include "MapCell.h"
 #include "Camera.h"
 #include "GameState.h"
 #include "GridGenerator.h"

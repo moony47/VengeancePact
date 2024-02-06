@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "BattlefieldCell.h"
+#include "MapCell.h"
 #include "QuadTree.h"
 #include "Weather.h"
 

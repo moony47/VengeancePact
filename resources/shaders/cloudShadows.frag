@@ -14,14 +14,16 @@ void main() {
 	bool inOutline = false;
 
 	for(int i = 0; i < 20; i++) {
+		if (cloudSize[i] == 0)
+			break;
 		vec2 shadowPos = (gl_ModelViewProjectionMatrix * vec4(cloudPos[i], 0, 1)).xy;
 		vec2 shadowPos2 = (gl_ModelViewProjectionMatrix * vec4(cloudPos2[i], 0, 1)).xy;
 		if (length(vec2(shadowPos.x - vert_pos.x, (shadowPos.y - vert_pos.y) / 0.7)) < cloudSize[i] || 
 			length(vec2(shadowPos2.x - vert_pos.x, (shadowPos2.y - vert_pos.y) / 0.7)) < cloudSize[i] / 1.5) {
 			inShadow = true;
 			break;
-		} else if (length(vec2(shadowPos.x - vert_pos.x, (shadowPos.y - vert_pos.y) / 0.7)) < 0.005 + cloudSize[i] ||
-				   length(vec2(shadowPos2.x - vert_pos.x, (shadowPos2.y - vert_pos.y) / 0.7)) < 0.005 + cloudSize[i] / 1.5) {
+		} else if (length(vec2(shadowPos.x - vert_pos.x, (shadowPos.y - vert_pos.y) / 0.7)) < 1.02 * cloudSize[i] ||
+				   length(vec2(shadowPos2.x - vert_pos.x, (shadowPos2.y - vert_pos.y) / 0.7)) < 1.02 * cloudSize[i] / 1.5) {
 			inOutline = true;
 		}
 	}
