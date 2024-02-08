@@ -146,11 +146,11 @@ void GameStateManager::setQuadTreeNavNeighbours(QuadTree* root) {
     }
 }
 
-QuadTree* GameStateManager::getQuadTreeNode(sf::Vector2f point) {
+QuadTree* GameStateManager::getQuadTreeNode(const sf::Vector2f point) const {
     return getQuadTreeNode(gameState.quadTree, point);
 }
 
-QuadTree* GameStateManager::getQuadTreeNode(QuadTree* root, sf::Vector2f point) {
+QuadTree* GameStateManager::getQuadTreeNode(QuadTree* root, const sf::Vector2f point) const {
     if (root->children[0] == nullptr)
         return root;
 

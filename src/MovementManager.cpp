@@ -1,5 +1,7 @@
 #include "MovementManager.h"
 
+#define H_BIAS 1.5f
+
 MovementManager::MovementManager() {
 }
 
@@ -16,7 +18,7 @@ void MovementManager::clearNodes(std::vector<QuadTreeNav*> toClear) {
 	}
 }
 
-std::vector<sf::Vector2f> MovementManager::AStarPathFind(sf::Vector2f source, sf::Vector2f target, GameStateManager& gameStateManager) {
+std::vector<sf::Vector2f> MovementManager::AStarPathFind(const sf::Vector2f source, const sf::Vector2f target, const GameStateManager& gameStateManager) {
 	QuadTreeNav* sourceNode = (QuadTreeNav*)gameStateManager.getQuadTreeNode(source);
 	QuadTreeNav* targetNode = (QuadTreeNav*)gameStateManager.getQuadTreeNode(target);
 
@@ -39,7 +41,7 @@ std::vector<sf::Vector2f> MovementManager::AStarPathFind(sf::Vector2f source, sf
 		QuadTreeNav* currentNode = openSet[current];
 
 		if (currentNode->quadRect.contains(target)) {
-			std::vector<sf::Vector2f> path = retracePath(*currentNode);
+			std::vector<sf::Vector2f> path = retracePath(*currentNode, source, target);
 			clearNodes(openSet);
 			clearNodes(closedSet);
 			return path;
@@ -53,10 +55,11 @@ std::vector<sf::Vector2f> MovementManager::AStarPathFind(sf::Vector2f source, sf
 			if (neigh == nullptr)
 				continue;
 
-			if (neigh->walkability == 0)
+			if (neigh->walkability <= 0)
 				continue;
+
 			if (!neigh->visited)
-				neigh->initialiseNavNode(euclideanDistance(neigh->quadRect.getPosition(), targetNode->quadRect.getPosition()));
+				neigh->initialiseNavNode(H_BIAS * euclideanDistance(neigh->quadRect.getPosition(), targetNode->quadRect.getPosition()));
 
 			float temp_g = currentNode->g + euclideanDistance(currentNode->quadRect.getPosition(), neigh->quadRect.getPosition()) / neigh->walkability;
 
@@ -76,8 +79,9 @@ std::vector<sf::Vector2f> MovementManager::AStarPathFind(sf::Vector2f source, sf
 	return std::vector<sf::Vector2f>();
 }
 
-std::vector<sf::Vector2f> MovementManager::retracePath(QuadTreeNav& start) {
+std::vector<sf::Vector2f> MovementManager::retracePath(QuadTreeNav& start, const sf::Vector2f source, const sf::Vector2f target) {
 	std::vector<sf::Vector2f> path;
+	path.push_back(target);
 	path.push_back(start.quadRect.getPosition());
 
 	QuadTreeNav* current = &start;
@@ -85,10 +89,12 @@ std::vector<sf::Vector2f> MovementManager::retracePath(QuadTreeNav& start) {
 		path.push_back(current->prev->quadRect.getPosition());
 		current = current->prev;
 	}
+	path.push_back(source);
 
 	return path;
 }
 
-float MovementManager::euclideanDistance(const sf::Vector2f& v, const sf::Vector2f& u) const {
+float MovementManager::euclideanDistance(const sf::Vector2f v, const sf::Vector2f u) const {
 	return std::sqrtf((v.x - u.x) * (v.x - u.x) + (v.y - u.y) * (v.y - u.y));
+	//return (v.x - u.x) * (v.x - u.x) + (v.y - u.y) * (v.y - u.y);
 }

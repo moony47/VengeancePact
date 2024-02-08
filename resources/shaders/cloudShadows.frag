@@ -8,7 +8,7 @@ uniform float cloudSize[20];
 void main() {
 	vec4 ambient = vec4(1, 1, 1, 1);
 	vec4 shaded = vec4(0.25, 0.15 / 0.68, 0.28 / 0.38, 1/0.7) * 0.7;
-	vec4 outline = vec4(0.2, 0.05, 0.3, 1);
+	vec4 outline = 0.8*vec4(0.2, 0.05, 0.3, 1);
 
 	bool inShadow = false;
 	bool inOutline = false;

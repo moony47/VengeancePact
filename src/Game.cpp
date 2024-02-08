@@ -27,9 +27,10 @@ void Game::Run() {
 
             //Update Camera
             camera.Zoom(window, event, dt);
-            camera.Pan(window, event, dt);
+            camera.MousePan(window, event);
             camera.SelectCell(window, event, gameStateManager);
         }
+        camera.EdgePan(window, event, dt);
 
         //Move Clouds
         gameStateManager.moveClouds(dt, window.getSize().x / camera.view.getSize().x);

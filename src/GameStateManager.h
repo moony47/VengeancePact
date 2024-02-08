@@ -16,14 +16,14 @@ public:
 
     void moveClouds(float dt, float scale);
 
-    QuadTree* getQuadTreeNode(sf::Vector2f point);
+    QuadTree* getQuadTreeNode(const sf::Vector2f point) const;
 private:
     void generateQuadTree(QuadTree* root, unsigned int& i);
     MapCell generateCell(int x, int y);
 
     void setQuadTreeNavNeighbours(QuadTree* root);
 
-    QuadTree* getQuadTreeNode(QuadTree* root, sf::Vector2f point);
+    QuadTree* getQuadTreeNode(QuadTree* root, const sf::Vector2f point) const;
 
     void spawnRandomClouds(unsigned int num);
 

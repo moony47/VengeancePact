@@ -17,7 +17,8 @@ public:
 
     sf::View view;
 
-    void Pan(sf::RenderWindow& window, sf::Event& event, float dt);
+    void MousePan(sf::RenderWindow& window, sf::Event& event);
+    void EdgePan(sf::RenderWindow& window, sf::Event& event, float dt);
     void Zoom(sf::RenderWindow& window, sf::Event& event, float dt);
 
     void SelectCell(sf::RenderWindow& window, sf::Event& event, GameStateManager& gameStateManager);

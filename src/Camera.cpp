@@ -5,23 +5,13 @@ Camera::Camera(sf::Vector2u screenSize)
     select.loadFromFile("resources/images/terrain/selected.png");
 }
 
-void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
+void Camera::EdgePan(sf::RenderWindow& window, sf::Event& event, float dt) {
     window.setView(view);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2u windowSize = window.getSize();
     const int edgeThreshold = windowSize.y / 20;
     float scale = viewScale(window);
-
-
-    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle) {
-        mouseButtonPanning = true;
-        startPanX = mousePos.x;
-        startPanY = mousePos.y;
-    }
-
-    if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Middle) {
-        mouseButtonPanning = false;
-    }
 
     if (mouseButtonPanning) {
         view.move(-(mousePos.x - startPanX) / scale, -(mousePos.y - startPanY) / scale);
@@ -51,6 +41,22 @@ void Camera::Pan(sf::RenderWindow& window, sf::Event& event, float dt) {
     if (offsetX < -12000) offsetX = -12000;
     if (offsetY > 10500) offsetY = 10500;
     if (offsetY < -500) offsetY = -500;*/
+    window.setView(window.getDefaultView());
+}
+
+void Camera::MousePan(sf::RenderWindow& window, sf::Event& event) {
+    window.setView(view);
+
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    sf::Vector2u windowSize = window.getSize();
+
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle) {
+        mouseButtonPanning = true;
+        startPanX = mousePos.x;
+        startPanY = mousePos.y;
+    } else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Middle)
+        mouseButtonPanning = false;
+
     window.setView(window.getDefaultView());
 }
 
@@ -98,7 +104,7 @@ void Camera::DrawScene(sf::RenderWindow& window, Weather* weather, std::set<std:
     }
 
     for (sf::Vector2f p : path)
-        DrawTexture(window, nullptr, select, p.x/ 250.f, p.y/ 250.f);
+        DrawTexture(window, nullptr, select, p.x / 500.f, p.y / 500.f);
 }
 
 void Camera::DrawTexture(sf::RenderWindow& window, Weather* weather, sf::Texture& texture, float x, float y) {
@@ -120,19 +126,19 @@ void Camera::SelectCell(sf::RenderWindow& window, sf::Event& event, GameStateMan
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), view);
-            sf::Vector2f isoPos = GridGenerator::isometricToCartesianTransform(mousePos, 1.f);
+            sf::Vector2f cartPos = GridGenerator::isometricToCartesianTransform(mousePos, 0.5f);
 
             path.clear();
-            path.push_back(gameStateManager.getQuadTreeNode(isoPos)->quadRect.getPosition());
+            path.push_back(cartPos);
         } else if (event.mouseButton.button == sf::Mouse::Right) {
             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window), view);
-            sf::Vector2f isoPos = GridGenerator::isometricToCartesianTransform(mousePos, 1.f);
+            sf::Vector2f cartPos = GridGenerator::isometricToCartesianTransform(mousePos, 0.5f);
 
             MovementManager movement;
             if (!path.empty())
-                path = movement.AStarPathFind(path.back(), isoPos, gameStateManager);
+                path = movement.AStarPathFind(path.back(), cartPos, gameStateManager);
             else
-                path = movement.AStarPathFind(isoPos, isoPos, gameStateManager);
+                path = movement.AStarPathFind(cartPos, cartPos, gameStateManager);
         }
     }
 }

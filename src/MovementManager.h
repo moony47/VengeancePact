@@ -33,9 +33,9 @@ public:
 	MovementManager();
 	~MovementManager();
 
-	std::vector<sf::Vector2f> AStarPathFind(sf::Vector2f, sf::Vector2f, GameStateManager& gameStateManager);
+	std::vector<sf::Vector2f> AStarPathFind(const sf::Vector2f, const sf::Vector2f, const GameStateManager& gameStateManager);
 private:
-	std::vector<sf::Vector2f> retracePath(QuadTreeNav&);
-	float euclideanDistance(const sf::Vector2f&, const sf::Vector2f&) const;
+	std::vector<sf::Vector2f> retracePath(QuadTreeNav&, const sf::Vector2f source, const sf::Vector2f target);
+	float euclideanDistance(const sf::Vector2f, const sf::Vector2f) const;
 	void clearNodes(std::vector<QuadTreeNav*>);
 };
